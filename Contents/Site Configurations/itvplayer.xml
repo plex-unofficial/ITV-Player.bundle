@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<site  site="http://www.itv.com/itvplayer"
+       plugin="http://www.itv.com/mercury/Mercury_VideoPlayer*"
+       initialState="buffering" 
+       version="1.0">
+	
+       
+       <seekbar type="simple">
+	<start x="25" y="312" />  
+	<end x="400" y="312" />
+	<played>
+	  <color rgb="000000" />
+	</played>
+      </seekbar>
+       
+       
+       
+       <state name="buffering">
+		<event>
+			<condition>
+				<frameLoaded />
+			</condition>
+			<action>
+				<run script="var plexEMP = null;" />
+				<run script="plexEMP = document.getElementById('Mercury_VideoPlayervideoplayer'); " />
+				
+				<pause time="1000"/> <!-- wait one second -->
+				<run script="plexEMP.guidanceAproved(); " />
+				
+				<run script="plexEMP.playVideo(); " />
+				<goto state="playing" />
+			</action>
+		</event>
+	</state>
+              
+      <!-- Playing -->
+	<state name="playing">
+		<event>
+			<condition>                         
+                              <command name="pause" />
+			</condition>
+			<action>			      
+                              <run script="plexEMP.pauseVideo();" />
+			      <goto state="paused" />
+			</action>
+		</event>
+		
+
+	</state>
+
+	<!-- Paused -->
+	<state name="paused">
+		<event>
+			<condition>
+				<command name="play" />
+			</condition>
+			<action>
+			       <run script="plexEMP.guidanceAproved(); " />
+                               <run script="plexEMP.playVideo();" />
+			       <goto state="playing" />
+			</action>
+		</event>
+	</state>
+        
+     
+</site>
